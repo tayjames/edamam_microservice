@@ -2,6 +2,8 @@ var shell = require('shelljs');
 var request = require('supertest');
 var app = require('../../../../app');
 const fetch = require('node-fetch');
+var Recipe = require('../../../models').Recipe;
+
 
 
 describe('Edamam API', () => {
