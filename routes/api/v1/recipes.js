@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
 var Recipe = require('../../../models').Recipe;
+var Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 router.get('/', function(req, res, next) {
   Recipe.findAll()
@@ -16,6 +18,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/food_search', function(req, res, next) {
+  console.log("food search line 19");
   Recipe.findAll({
     where: {
       foodType: req.query.q
@@ -25,7 +28,7 @@ router.get('/food_search', function(req, res, next) {
       if (list[0] == undefined) {
         let edamam = `https://api.edamam.com/search?q=${req.query.q}&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_APP_KEY}`
         fetch(edamam)
-        .then(response => response.json())
+        .then(res => res.json())
         .then(result => result["hits"])
         .then(recipes => {
           var recipeData = []
@@ -41,14 +44,16 @@ router.get('/food_search', function(req, res, next) {
             }
             recipeData.push(receta)
           })
-            return recipeData
+            return res.status(200).send(recipeData);
+
           })
           .then(recipeData => {
             Recipe.bulkCreate(recipeData)
-        })
+          })
           .then(createdRecipes => {
             res.setHeader("Content-Type", "application/json");
             res.status(201).send(JSON.stringify(createdRecipes))
+            return recipeData
           })
         .catch(error => {
           res.setHeader("Content-Type", "application/json");
@@ -64,5 +69,6 @@ router.get('/food_search', function(req, res, next) {
       res.status(500).send({error})
     });
 });
+
 
 module.exports = router;
