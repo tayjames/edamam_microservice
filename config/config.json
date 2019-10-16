@@ -12,7 +12,9 @@
     "operatorsAliases": false
   },
   "production": {
+    "use_env_variable": "DATABASE_URL",
     "database": "edamam_microservice_production",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "host": "https://tranquil-everglades-51925.herokuapp.com/"
   }
 }
