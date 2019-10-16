@@ -404,7 +404,7 @@ Next, visit Edamam's API service and obtain an APP ID and APP KEY
 * Create a `.env` file
 * Install [Dotenv](https://www.npmjs.com/package/dotenv) to protect sensitive information.
 * Define the APP KEY like so: EDAMAM_APP_KEY=xxxxxxx
-* Define the APP ID like so: EDAMAM_APP_ID=6c369a2b
+* Define the APP ID like so: EDAMAM_APP_ID=xxxxxx
 * Run `npx db:seed:all`
 
 After you complete these steps you should be good to go! 
