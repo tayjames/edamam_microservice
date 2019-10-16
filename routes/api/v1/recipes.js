@@ -47,6 +47,7 @@ router.get('/food_search', function(req, res, next) {
     }
   })
     .then(list => {
+      res.setHeader("Content-Type", "application/json");
       if (list[0] == undefined) {
         let edamam = `https://api.edamam.com/search?q=${req.query.q}&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_APP_KEY}`
         fetch(edamam)
@@ -73,21 +74,21 @@ router.get('/food_search', function(req, res, next) {
             Recipe.bulkCreate(recipeData)
           })
           .then(createdRecipes => {
-            res.setHeader("Content-Type", "application/json");
+
             res.status(201).send(JSON.stringify(createdRecipes))
-            return recipeData
+            return createdRecipes
           })
-        .catch(error => {
-          res.setHeader("Content-Type", "application/json");
-          res.status(500).send(JSON.stringify({error}));
-        })
+        // .catch(error => {
+        //
+        //   res.status(500).send(JSON.stringify({error}));
+        // })
       } else {
-        res.setHeader("Content-Type", "application/json");
+
         res.status(200).send(JSON.stringify(list));
       }
     })
     .catch(error => {
-      res.setHeader("Content-Type", "application/json");
+
       res.status(400).send(JSON.stringify("Don't forget to include the type of food you want to search for!"))
     });
 });
