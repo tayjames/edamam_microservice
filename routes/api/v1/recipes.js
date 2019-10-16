@@ -41,7 +41,6 @@ router.get('/calorie_search', function(req, res, next) {
 });
 
 router.get('/food_search', function(req, res, next) {
-  console.log("food search line 19");
   Recipe.findAll({
     where: {
       foodType: req.query.q
@@ -113,5 +112,66 @@ router.get('/serving_search', function(req, res, next) {
     res.setHeader(500).send({error})
   });
 });
+
+router.get('/sort_ingredients', function(req, res, next) {
+  Recipe.findAll({
+    where: {
+      foodType: req.query.q
+    },
+    order: [
+      ['ingredients', 'ASC']
+    ]
+  })
+    .then(list => {
+      if (list[0] == undefined) {
+        let edamam = `https://api.edamam.com/search?q=${req.query.q}&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_APP_KEY}`
+        fetch(edamam)
+        .then(res => res.json())
+        .then(result => result["hits"])
+        .then(recipes => {
+          var recipeData = []
+          recipes.forEach(function(element) {
+            var receta = {
+              foodType: req.query.q,
+              recipe: element.recipe.label,
+              recipeUrl: element.recipe.url,
+              servings: element.recipe.yield,
+              ingredients: element.recipe.ingredients.length,
+              calories: element.recipe.calories,
+              prepTime: element.recipe.totalTime
+            }
+            recipeData.push(receta)
+          })
+            return Recipe.bulkCreate(recipeData)
+          })
+          .then(createdRecipes => {
+            return Recipe.findAll({
+              where: {
+                foodType: req.query.q
+              },
+              order: [
+                ['ingredients', 'ASC']
+              ]
+            })
+          })
+          .then(sortedRecipes => {
+            res.setHeader("Content-Type", "application/json");
+            res.status(201).send(JSON.stringify(sortedRecipes))
+          })
+        .catch(error => {
+          res.setHeader("Content-Type", "application/json");
+          res.status(500).send({error});
+        })
+      } else {
+        res.setHeader("Content-Type", "application/json");
+        res.status(200).send(JSON.stringify(list));
+      }
+    })
+    .catch(error => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(500).send({error})
+    });
+})
+
 
 module.exports = router;
