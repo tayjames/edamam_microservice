@@ -93,4 +93,25 @@ router.get('/food_search', function(req, res, next) {
     });
 });
 
+router.get('/serving_search', function(req, res, next) {
+  Recipe.findAll ({
+    where: {
+      servings: req.query.q
+    }
+  })
+  .then(servings => {
+    if (req.query.q == "" || req.query.q == undefined) {
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader(400).send(JSON.stringify("Don't forget to send this request with a serving amount"))
+    } else {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).send(JSON.stringify(servings))
+    }
+  })
+  .catch(error => {
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader(500).send({error})
+  });
+});
+
 module.exports = router;
