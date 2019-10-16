@@ -1,16 +1,19 @@
 language: node_js
 node_js:
 - node
-
 services:
 - postgresql
-
 before_script:
 - psql -c 'create database edamam_microservice_test;' -U postgres
 - sequelize db:migrate --env test
-
 script:
 - npm install
-
 after_script:
 - npm test
+deploy:
+  provider: heroku
+  api_key:
+    secure: co7ANzDUpxMd/ToXiYkqcxizPj5zu7Bv+vs8Qp81yDHBhuHzfJVbUjncZHTvFiK4xPzaSkzJh/uBIh1ei48XuCgH5IHYH0r+MHUVY6RbvL8u+AJZVoCW+FyEI5cGm6ZPcitEwpQDSK+fPGitZNKYFIwMOwpbSFRNEaoX8JsWnO82XUvJUimjX2oSLG9DkiVTZ8y81GQ+qumfvgl6Ks1g1RXuUEo8hg2GnkGSeCysEFotViV/fcf585fN2R/EjyKOz7zzcTybcAe1wxQEfMoOBN95JmnDDAzc/Ozs4r38DpIzYikek12So9qGYgD71J2IS/vuKDOSfa1orcVqCUOF545pr6sXFqyGG2JQ0XbV+aNnWCv49bxqYZljo9uc98xQt6jdaopiabWcfwFML9nnW/Bq4atANMyf298REzc53MIIQTY2Nu6QsxrXSr7aMBa485AfufdagM7ackutqt6iihgL97uwEyTbAklsZZR+p7g2CMK+t+0v38Lt+Bjdsg4z0wPBjMo7NhuQIU7z9otQFaw+Qs4SZJSn6GuVg0zBxbgg4Hc7Svf16hi+HBpj8rPKH/ZMIexW4IwmYPWOGv4wkRHwPQpauCMOS9aDEzIZsIM2fcqjHmi1+pQFpaM5S0te0dVq5p01QVCcdgEE2zoUxZLiVXhFrbQ7z0wdFA7xCCM=
+  app: tranquil-everglades-51925
+  on:
+    repo: tayjames/edamam_microservice
