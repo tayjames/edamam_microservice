@@ -17,6 +17,6 @@
   },
   "production": {
     "database": "edamam_microservice_production",
-    "dialect": "postgres",
+    "dialect": "postgres"
   }
 }
