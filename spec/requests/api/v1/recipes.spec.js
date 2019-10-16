@@ -76,7 +76,7 @@ describe('Edamam API', () => {
   })
 })
 
-  test('GET /api/v1/recipes/sort_ingredients?q=food', () => {
+  test('GET /api/v1/recipes/sort_ingredients?q=food NOT IN DATABASE', () => {
   return request(app)
   .get('/api/v1/recipes/sort_ingredients?q=carrot')
   .then(response => {
@@ -86,13 +86,41 @@ describe('Edamam API', () => {
   })
 })
 
-  test('GET /api/v1/recipes/sort_ingredients?q=food', () => {
+  test('GET /api/v1/recipes/sort_ingredients?q=food IN DATABASE', () => {
   return request(app)
   .get('/api/v1/recipes/sort_ingredients?q=Coconut')
   .then(response => {
     expect(response.statusCode).toBe(200),
     expect(response.body.length).toBe(5),
     expect(response.body[0].ingredients).toBeLessThanOrEqual(response.body[4].ingredients)
+  })
+})
+
+  test('GET /api/v1/recipes/sort_ingredients?q=food SAD PATH', () => {
+  return request(app)
+  .get('/api/v1/recipes/sort_ingredients?')
+  .then(response => {
+    expect(response.statusCode).toBe(500)
+  })
+})
+
+  test('GET /api/v1/recipes/average_calories?q=food NOT IN DATABASE', () => {
+  return request(app)
+  .get('/api/v1/recipes/average_calories?q=carrot')
+  .then(response => {
+    expect(response.statusCode).toBe(201),
+    expect(response.body.length).toBe(1),
+    expect(response.body[0].averageCalories).toBe(615.426554183462)
+  })
+})
+
+  test('GET /api/v1/recipes/average_calories?q=food IN DATABASE', () => {
+  return request(app)
+  .get('/api/v1/recipes/average_calories?q=Coconut')
+  .then(response => {
+    expect(response.statusCode).toBe(201),
+    expect(response.body.length).toBe(1),
+    expect(response.body[0].averageCalories).toBe(2993.10169415911)
   })
 })
 
