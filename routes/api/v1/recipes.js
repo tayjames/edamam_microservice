@@ -79,7 +79,7 @@ router.get('/food_search', function(req, res, next) {
           })
         .catch(error => {
           res.setHeader("Content-Type", "application/json");
-          res.status(500).send({error});
+          res.status(500).send(JSON.stringify({error}));
         })
       } else {
         res.setHeader("Content-Type", "application/json");
@@ -88,7 +88,7 @@ router.get('/food_search', function(req, res, next) {
     })
     .catch(error => {
       res.setHeader("Content-Type", "application/json");
-      res.status(500).send({error})
+      res.status(400).send(JSON.stringify("Don't forget to include the type of food you want to search for!"))
     });
 });
 
@@ -99,7 +99,7 @@ router.get('/serving_search', function(req, res, next) {
     }
   })
   .then(servings => {
-    if (req.query.q == "" || req.query.q == undefined) {
+    if (req.query.q.length == 0) {
       res.setHeader("Content-Type", "application/json");
       res.setHeader(400).send(JSON.stringify("Don't forget to send this request with a serving amount"))
     } else {
@@ -109,7 +109,7 @@ router.get('/serving_search', function(req, res, next) {
   })
   .catch(error => {
     res.setHeader("Content-Type", "application/json");
-    res.setHeader(500).send({error})
+    res.setHeader(500).send(JSON.stringify("ERROR"))
   });
 });
 
@@ -169,7 +169,7 @@ router.get('/sort_ingredients', function(req, res, next) {
     })
     .catch(error => {
       res.setHeader("Content-Type", "application/json");
-      res.status(500).send({error})
+      res.status(400).send(JSON.stringify("Don't forget to include a type of food in your search!"))
     });
 })
 
@@ -229,7 +229,7 @@ router.get('/average_calories', function(req, res, next) {
     })
     .catch(error => {
       res.setHeader("Content-Type", "application/json");
-      res.status(500).send({error})
+      res.status(400).send(JSON.stringify("Don't forget to include a type of food in your search!"))
     });
 })
 
