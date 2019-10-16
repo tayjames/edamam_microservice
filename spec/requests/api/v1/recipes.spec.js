@@ -25,7 +25,7 @@ describe('Edamam API', () => {
     })
   })
 
-  test('GET /api/v1/recipes/calorie_search?q=calorie_count', async () => {
+  test('GET /api/v1/recipes/calorie_search?q=calorie_count', () => {
   return request(app)
   .get('/api/v1/recipes/calorie_search?q=0-1000')
   .then(response => {
@@ -34,7 +34,7 @@ describe('Edamam API', () => {
   })
 })
 
-  test('Returns a 400 status code when only one part of range is sent to GET /api/v1/recipes/calorie_search?q=calorie_count', async () => {
+  test('Returns a 400 status code when only one part of range is sent to GET /api/v1/recipes/calorie_search?q=calorie_count', () => {
   return request(app)
   .get('/api/v1/recipes/calorie_search?q=0')
   .then(response => {
@@ -43,11 +43,10 @@ describe('Edamam API', () => {
   })
 })
 
-  test('GET /api/v1/recipes/food_search?q=___ (stored in database)', async () => {
+  test('GET /api/v1/recipes/food_search?q=___ (stored in database)', () => {
     return request(app)
     .get('/api/v1/recipes/food_search?q=Pineapple')
     .then(response => {
-      console.log(response.statusCode)
       expect(response.statusCode).toBe(200),
       expect(response.body.length).toBe(5),
       expect(Object.keys(response.body[0])).toContain("foodType"),
@@ -60,7 +59,7 @@ describe('Edamam API', () => {
     })
   } )
 
-  test('Returns 500 status code when no query is sent to GET /api/v1/recipes/food_search?q=___', async () => {
+  test('Returns 500 status code when no query is sent to GET /api/v1/recipes/food_search?q=___', () => {
     return request(app)
     .get('/api/v1/recipes/food_search?')
     .then(response => {
@@ -68,7 +67,16 @@ describe('Edamam API', () => {
     })
   } )
 
-  // test('GET /api/v1/recipes/food_search?q=___ (not stored in database)', async () => {
+  test('GET /api/v1/recipes/serving_search?q=number', () => {
+  return request(app)
+  .get('/api/v1/recipes/serving_search?q=6')
+  .then(response => {
+    expect(response.statusCode).toBe(200),
+    expect(response.body.length).toBe(3)
+  })
+})
+
+  // test('GET /api/v1/recipes/food_search?q=___ (not stored in database)', () => {
   //   return request(app)
   //   .get('/api/v1/recipes/food_search?q=artichoke')
   //   .then(response => {
