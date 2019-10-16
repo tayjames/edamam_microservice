@@ -76,6 +76,26 @@ describe('Edamam API', () => {
   })
 })
 
+  test('GET /api/v1/recipes/sort_ingredients?q=food', () => {
+  return request(app)
+  .get('/api/v1/recipes/sort_ingredients?q=carrot')
+  .then(response => {
+    expect(response.statusCode).toBe(201),
+    expect(response.body.length).toBe(10),
+    expect(response.body[0].ingredients).toBeLessThanOrEqual(response.body[9].ingredients)
+  })
+})
+
+  test('GET /api/v1/recipes/sort_ingredients?q=food', () => {
+  return request(app)
+  .get('/api/v1/recipes/sort_ingredients?q=Coconut')
+  .then(response => {
+    expect(response.statusCode).toBe(200),
+    expect(response.body.length).toBe(5),
+    expect(response.body[0].ingredients).toBeLessThanOrEqual(response.body[4].ingredients)
+  })
+})
+
   // test('GET /api/v1/recipes/food_search?q=___ (not stored in database)', () => {
   //   return request(app)
   //   .get('/api/v1/recipes/food_search?q=artichoke')
